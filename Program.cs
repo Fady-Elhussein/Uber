@@ -22,15 +22,17 @@ namespace Uber
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddAuthorization();
-            builder.Services.AddControllers(options =>
-            {
-                options.Filters.Add(
-                    new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
-            });
+            //builder.Services.AddControllers(options =>
+            //{
+            //    options.Filters.Add(
+            //        new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
+            //});
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            builder.Services.AddScoped<IAuthRepository,AuthRepository>();
+            builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -63,8 +65,7 @@ namespace Uber
                 };
             });
 
-            // 4. Add Authorization
-            builder.Services.AddAuthorization();
+           
 
             var app = builder.Build();
 
@@ -76,7 +77,7 @@ namespace Uber
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

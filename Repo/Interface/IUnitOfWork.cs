@@ -8,7 +8,7 @@ namespace Uber.Repo.Interface
 
         IAuthRepository Auth { get; }
         IVehicleRepository Vehicles { get; }
-        IGenericRepository<User> Users { get; }
+        IUserRepository Users { get; }
         IGenericRepository<Ride> Rides { get; }
         IGenericRepository<Payment> Payments { get; }
         IGenericRepository<Rating> Ratings { get; }

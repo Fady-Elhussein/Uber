@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Uber.Model
 {
@@ -21,14 +22,17 @@ namespace Uber.Model
         public string Status { get; set; } = "Pending";
 
         [Required]
+        [ForeignKey (nameof(Rider))]
         public int RiderId { get; set; }
+        [ForeignKey(nameof(Driver))]
+
 
         public int? DriverId { get; set; }
 
         // Navigation Properties
-        public User Rider { get; set; } = null!;
+        public User? Rider { get; set; } = null!; // User Rider{ get; set; }
 
-        public User? Driver { get; set; }
+        public User? Driver { get; set; }// User Driver{ get; set; }
 
         public Payment? Payment { get; set; }
 

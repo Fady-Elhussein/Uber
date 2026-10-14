@@ -7,7 +7,7 @@ using Uber.Repo.Interface;
 
 namespace Uber.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VehiclesController : ControllerBase
@@ -18,8 +18,15 @@ namespace Uber.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll() {
+          return Ok( await _unitOfWork.Vehicles.GetAllAsync());
+            
+        
+        }
 
         // POST: api/vehicles
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateVehicleDto dto)
         {
@@ -92,6 +99,7 @@ namespace Uber.Controllers
         }
 
         // DELETE: api/vehicles/{id}
+        [Authorize (Roles ="Driver")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

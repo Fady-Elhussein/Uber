@@ -49,6 +49,7 @@ namespace Uber.Controllers
             };
 
             await _authRepository.Auth.Add(user);
+            await _authRepository.SaveChangesAsync();
 
             var result = new UserDto
             {
@@ -70,32 +71,36 @@ namespace Uber.Controllers
             if (user == null)
                 return Unauthorized("Invalid email or password");
 
+          
+            return Ok(new
+            {
+                Token = GenerateJwtToken(user)
+            });
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+          
             var claims = new[]
             {
-                new Claim(
+                 new Claim(
                     ClaimTypes.NameIdentifier,
                     user.Id.ToString()),
-
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
             };
-
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+           
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
-                signingCredentials: new SigningCredentials(
-                    key, SecurityAlgorithms.HmacSha256));
-
-            return Ok(new
-            {
-                Token = new JwtSecurityTokenHandler()
-                    .WriteToken(token)
-            });
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
-    
-}
+
+    }
 }

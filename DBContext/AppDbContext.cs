@@ -25,6 +25,8 @@ namespace Uber.DBContext
             // =========================
             // User Configuration
             // =========================
+  
+
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -40,19 +42,18 @@ namespace Uber.DBContext
                 entity.HasIndex(u => u.Email)
                       .IsUnique();
 
-                entity.Property(u => u.Password)
+                entity.Property(u => u.Password )
                       .IsRequired();
 
                 entity.Property(u => u.Phone)
                       .IsRequired();
 
                 entity.Property(u => u.Role)
-                      .IsRequired()
-                      .HasConversion<string>();
-            });
+                      .IsRequired();
+          });
 
             // =========================
-            // User - Vehicle (1:1)
+            // User(Driver) - Vehicle (1:1)
             // =========================
 
             modelBuilder.Entity<User>()
@@ -64,6 +65,8 @@ namespace Uber.DBContext
             // =========================
             // Vehicle Configuration
             // =========================
+
+            //modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
 
             modelBuilder.Entity<Vehicle>(entity =>
             {
@@ -95,17 +98,23 @@ namespace Uber.DBContext
                 .HasOne(r => r.Driver)
                 .WithMany(u => u.DriverRides)
                 .HasForeignKey(r => r.DriverId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasMany(r => r.DriverRides)
+                .WithOne(u => u.Driver)
+                .HasForeignKey(r => r.DriverId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // =========================
-            // Rider - Rides (1:M)
+            // USer(Rider) - Rides (1:M)
             // =========================
 
             modelBuilder.Entity<Ride>()
                 .HasOne(r => r.Rider)
                 .WithMany(u => u.RiderRides)
                 .HasForeignKey(r => r.RiderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // =========================
             // Ride Configuration

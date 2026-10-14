@@ -10,13 +10,13 @@ namespace Uber.Repo.Implementation
         private readonly AppDbContext _context;
 
         public IAuthRepository Auth { get; }
-        public IGenericRepository<User> Users { get; }
+        public IUserRepository Users { get; }
         public IVehicleRepository Vehicles { get; }
         public IGenericRepository<Ride> Rides { get; }
         public IGenericRepository<Payment> Payments { get; }
         public IGenericRepository<Rating> Ratings { get; }
 
-        public UnitOfWork(AppDbContext context, IAuthRepository auth, IVehicleRepository vehicles, IGenericRepository<Ride> rides, IGenericRepository<Payment> payments, IGenericRepository<Rating> ratings, IGenericRepository<User> users)
+        public UnitOfWork(AppDbContext context, IAuthRepository auth, IVehicleRepository vehicles, IGenericRepository<Ride> rides, IGenericRepository<Payment> payments, IGenericRepository<Rating> ratings, IUserRepository users)
         {
             _context = context;
 
